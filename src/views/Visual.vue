@@ -37,11 +37,18 @@
             </div>
             <div class="right">
               <div>{{ id }}</div>
-              <div>
-                {{ getkind }}
+              <div v-if="clickCar.ckind === 0">
+                小型车
               </div>
-              <div>{{ xpos }}</div>
-              <div>{{ timespan }}</div>
+              <div v-else-if="clickCar.ckind == 3">
+                中型车
+              </div>
+              <div v-else-if="clickCar.ckind == 4">
+                大型车
+              </div>
+              <div v-else></div>
+              <div>{{ clickCar.xxx }}</div>
+              <div>{{ clickCar.ctimespan }}</div>
             </div>
             <div class="left">
               <div>车道：</div>
@@ -50,15 +57,15 @@
               <div>车头间距：</div>
             </div>
             <div class="right">
-              <div>{{ lane }}</div>
+              <div>{{ clickCar.clane }}</div>
               <div class="blank"></div>
-              <div>{{ ypos }}</div>
-              <div>{{ space }}</div>
+              <div>{{ clickCar.cypos }}</div>
+              <div>{{ clickCar.cspace }}</div>
             </div>
           </div>
           <div class="speed">
             <div class="real_time">实时速度</div>
-            <i class="big-font">{{ getspped }}</i>
+            <i class="big-font">{{ getspped(clickCar.yspeed) }}</i>
             <span class="small_font">Km/H</span>
             <div class="waring" :class="{ routine: getclass }">
               {{ eve }}
@@ -73,9 +80,27 @@
               <div>联动视频：</div>
             </div>
             <div class="right">
-              <div>正常</div>
-              <div>正常</div>
-              <div>正常</div>
+              <div
+                :class="{
+                  error_msg: configParams.local_ecu == 1 ? false : true,
+                }"
+              >
+                {{ computingMode(configParams.local_ecu) }}
+              </div>
+              <div
+                :class="{
+                  error_msg: configParams.front_ecu == 1 ? false : true,
+                }"
+              >
+                {{ computingMode(configParams.front_ecu) }}
+              </div>
+              <div
+                :class="{
+                  error_msg: configParams.linkage_video == 1 ? false : true,
+                }"
+              >
+                {{ computingMode(configParams.linkage_video) }}
+              </div>
             </div>
             <div class="left">
               <div>雷达传感器：</div>
@@ -83,9 +108,27 @@
               <div>联动卡口：</div>
             </div>
             <div class="right">
-              <div>正常</div>
-              <div class="error_msg">连接失败</div>
-              <div class="error_msg">连接失败</div>
+              <div
+                :class="{
+                  error_msg: configParams.vadar_senso == 1 ? false : true,
+                }"
+              >
+                {{ computingMode(configParams.vadar_senso) }}
+              </div>
+              <div
+                :class="{
+                  error_msg: configParams.quee_ecu == 1 ? false : true,
+                }"
+              >
+                {{ computingMode(configParams.quee_ecu) }}
+              </div>
+              <div
+                :class="{
+                  error_msg: configParams.linkage_bayonet == 1 ? false : true,
+                }"
+              >
+                {{ computingMode(configParams.linkage_bayonet) }}
+              </div>
             </div>
           </div>
           <div class="fle">
@@ -95,10 +138,16 @@
             </div>
             <div class="box">
               <div class="histogram">
-                <div class="cpu_fill"></div>
+                <div
+                  class="cpu_fill"
+                  :style="{ width: configParams.cpu_num + '%' }"
+                ></div>
               </div>
               <div class="histogram">
-                <div class="memory_fill"></div>
+                <div
+                  class="memory_fill"
+                  :style="{ width: configParams.disk + '%' }"
+                ></div>
               </div>
             </div>
           </div>
@@ -112,51 +161,110 @@ import Snap from "snapsvg-cjs";
 import mqtt from "mqtt";
 var client = {};
 export default {
+  data: () => ({
+    clickCar: {},
+    configParams: {
+      local_ecu: 2,
+      front_ecu: 1,
+      linkage_video: 1,
+      cpu_num: 0,
+      memory: 0,
+      vadar_senso: 2,
+      quee_ecu: 2,
+      linkage_bayonet: 1,
+    },
+    paper: {},
+    // 车的数据
+    //限速值
+    speed_value: "50",
+    eve: "正常行驶",
+    id: "",
+    kind: "",
+    lane: "",
+    space: "",
+    timespan: "",
+    xpos: "",
+    xspeed: "",
+    ypos: "",
+    yspeed: "",
+    //是否超速
+    isWaring: true,
+    //画面宽度
+    window_width: 0,
+    //浏览器宽度
+    picWidth: 500,
+    //车道数,默认为8
+    laneNum: 8,
+    //车道长度
+    roadLength: 300,
+    //车道号对应位置
+    lanePos: [],
+    //所有车辆
+    cars: new Map(),
+    //上次所有车辆
+    preCars: new Map(),
+    ecu: {},
+    //ecu数据
+    desserts: [],
+    headers: [
+      { text: "ID", value: "id", width: 100 },
+      { text: "车道", value: "lane" },
+      { text: "车型", value: "kind" },
+      { text: "X坐标", value: "xpos" },
+      { text: "Y坐标", value: "ypos" },
+      { text: "X速度", value: "xspeed" },
+      { text: "Y速度", value: "yspeed" },
+      { text: "事件", value: "event" },
+      { text: "车头间距", value: "space" },
+      { text: "车头时距", value: "timespan" },
+    ],
+  }),
   computed: {
+    getCpu() {
+      return function(data) {
+        this.styles = {
+          width: data + "%",
+        };
+      };
+    },
+    computingMode() {
+      return function(data) {
+        var a = "";
+        if (data == 1) {
+          a = "正常";
+        } else if (data == 2) {
+          a = "连接失败";
+        }
+        return a;
+      };
+    },
     getspped() {
-      var a = (this.yspeed * 3600) / 1000;
-
-      return Math.round(a);
+      return function(data) {
+        var a = (data * 3600) / 1000;
+        return isNaN(a) ? "0" : Math.abs(Math.round(a));
+      };
     },
     getclass() {
       return this.eve == "正常行驶";
     },
     getkind() {
-      var a = "";
-      if (this.kind == "") {
-        a = "";
-      } else if (this.kind == 0) {
-        a = "小型车";
-      } else if (this.kind == 3) {
-        a = "中型车";
-      } else if (this.kind == 4) {
-        a = "大型车";
-      }
-      return a;
+      return function() {
+        var a = "";
+        if (this.kind == "") {
+          a = "";
+        }
+        if (this.kind == 0) {
+          a = "小型车";
+        }
+        if (this.kind == 3) {
+          a = "中型车";
+        }
+        if (this.kind == 4) {
+          a = "大型车";
+        }
+        return a;
+      };
     },
-    // condition() {
-    //   var a = "正常行驶";
-    //   if (this.eve == 0) {
-    //     a = "正常行车";
-    //   } else if (this.eve & (0x01 == 0x01)) {
-    //     a = "畅通停车";
-    //   } else if (this.eve & (0x02 == 0x02)) {
-    //     a = "拥堵停车";
-    //   } else if (this.eve & (0x04 == 0x04)) {
-    //     a = "车辆超速";
-    //   } else if (this.eve & (0x08 == 0x08)) {
-    //     a = "交通事故";
-    //   } else if (this.eve & (0x10 == 0x10)) {
-    //     a = "慢性车辆";
-    //   } else if (this.eve & (0x20 == 0x20)) {
-    //     a = "行人";
-    //   } else if (this.eve & (0x40 == 0x40)) {
-    //     a = "逆行车辆";
-    //   } else if (this.even & (0x80 == 0x80)) {
-    //     a = "抛撒物";
-    //   }
-    //   return a;
-    // },
   },
   created: function() {
     var ip = "127.0.0.1";
@@ -187,6 +295,11 @@ export default {
   },
   methods: {
     carClick(e) {
+      var id = e.id;
+      if (this.cars.has(id)) {
+        this.clickCar = this.cars.get(id);
+        console.log(this.clickCar);
+      }
       this.id = e.id;
       this.kind = e.kind;
       this.lane = e.lane;
@@ -198,21 +311,21 @@ export default {
       this.yspeed = e.yspeed;
       if (e.event == 0) {
         this.eve = "正常行驶";
-      } else if (e.event & (0x01 == 0x01)) {
+      } else if (e.event == 1) {
         this.eve = "畅通停车";
-      } else if (e.event & (0x02 == 0x02)) {
+      } else if (e.event == 2) {
         this.eve = "拥堵停车";
-      } else if (e.event & (0x04 == 0x04)) {
+      } else if (e.event == 4) {
         this.eve = "车辆超速";
-      } else if (e.event & (0x08 == 0x08)) {
+      } else if (e.event == 8) {
         this.eve = "交通事故";
-      } else if (e.event & (0x10 == 0x10)) {
-        this.eve = "慢性车辆";
-      } else if (e.event & (0x20 == 0x20)) {
-        this.eve = "行人";
-      } else if (e.event & (0x40 == 0x40)) {
-        this.eve = "逆行车辆";
       } else if (e.event == 16) {
+        this.eve = "慢行车辆";
+      } else if (e.event == 32) {
+        this.eve = "行人";
+      } else if (e.event == 64) {
+        this.eve = "逆行车辆";
+      } else if (e.event == 128) {
         this.eve = "抛撒物";
       }
     },
@@ -230,10 +343,15 @@ export default {
       client.on("message", (topic, payload) => {
         if (topic == "ui/objects") {
           var objs = JSON.parse(payload);
-          this.desserts = objs;
-          this.drawCars(objs);
+          this.desserts = objs.objs;
+          this.getConfigParams(objs.status);
+          this.drawCars(objs.objs);
         }
       });
+    },
+    getConfigParams(data) {
+      this.configParams = data;
+      console.log(this.configParams);
     },
     //画虚线
     drawLane(y, w) {
@@ -291,17 +409,6 @@ export default {
               break;
             }
           }
-
-          // this.paper
-          //   .line(
-          //     0,
-          //     lane_arr[i] * part + offset,
-          //     10,
-          //     lane_arr[i] * part + offset
-          //   )
-          //   .attr({ stroke: "#ff0", strokeWidth: 1 });
-          // offset += lane_arr[i] * part;
-          // console.log(lane_arr[i] * part);
         }
       } catch (error) {
         this.$toasted.show(error);
@@ -412,6 +519,15 @@ export default {
               car.attr({ fill: "#0FF" });
             }
           }
+					car.xxx = objs[i].xpos;
+					car.id=objs[i].id
+          car.ckind = objs[i].kind;
+          car.ckind = objs[i].kind;
+          car.clane = objs[i].lane;
+          car.cspace = objs[i].space;
+          car.ctimespan = objs[i].timespan;
+          car.cypos = objs[i].ypos;
+          car.yspeed = objs[i].yspeed;
           car.transform(posStr);
         } else {
           if (objs[i].lane > this.laneNum) {
@@ -433,7 +549,17 @@ export default {
           }
           car.xpos = objs[i].ypos;
           car.ypos = objs[i].xpos;
-          car.kind = objs[i].kind;
+
+          car.xxx = objs[i].xpos;
+          car.ckind = objs[i].kind;
+          car.ckind = objs[i].kind;
+          car.clane = objs[i].lane;
+          car.cspace = objs[i].space;
+          car.ctimespan = objs[i].timespan;
+          car.cypos = objs[i].ypos;
+
+          car.xspeed = objs[i].xspeed;
+          car.yspeed = objs[i].yspeed;
           this.cars.set(id, car);
         }
       }
@@ -441,7 +567,11 @@ export default {
       this.preCars.forEach((item, key) => {
         var car = this.cars.get(key);
         if (car != null) {
-          car.remove();
+					car.remove();
+					this.clickCar={}
+					this.id=''
+					this.eve='正常行驶'
+					
         }
         this.cars.delete(key);
       });
@@ -452,53 +582,6 @@ export default {
       });
     },
   },
-  data: () => ({
-    paper: {},
-    // 车的数据
-    //限速值
-    speed_value: "50",
-    eve: "正常行驶",
-    id: "",
-    kind: "",
-    lane: "",
-    space: "",
-    timespan: "",
-    xpos: "",
-    xspeed: "",
-    ypos: "",
-    yspeed: "",
-    //是否超速
-    isWaring: true,
-    //画面宽度
-    window_width: 0,
-    //浏览器宽度
-    picWidth: 500,
-    //车道数,默认为8
-    laneNum: 8,
-    //车道长度
-    roadLength: 300,
-    //车道号对应位置
-    lanePos: [],
-    //所有车辆
-    cars: new Map(),
-    //上次所有车辆
-    preCars: new Map(),
-    ecu: {},
-    //ecu数据
-    desserts: [],
-    headers: [
-      { text: "ID", value: "id", width: 100 },
-      { text: "车道", value: "lane" },
-      { text: "车型", value: "kind" },
-      { text: "X坐标", value: "xpos" },
-      { text: "Y坐标", value: "ypos" },
-      { text: "X速度", value: "xspeed" },
-      { text: "Y速度", value: "yspeed" },
-      { text: "事件", value: "event" },
-      { text: "车头间距", value: "space" },
-      { text: "车头时距", value: "timespan" },
-    ],
-  }),
 };
 </script>
 
@@ -518,6 +601,7 @@ html body {
   height: 12.5rem;
 }
 .massage_main {
+	overflow:scroll;
   height: 18.75rem;
   margin-top: 10px;
   width: 100%;
@@ -551,8 +635,11 @@ html body {
 .state {
   margin-left: 1.25rem;
 }
-.text-start {
+.v-data-table-header > tr > th {
   background-color: rgb(114, 112, 113) !important;
+}
+.text-start {
+  background-color: #fff;
 }
 .location {
   border: 0.0625rem solid black;

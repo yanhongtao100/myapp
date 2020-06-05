@@ -93,11 +93,21 @@
           dark
           class="ma-4"
           id="initialization"
-          v-on:click="onVisual"
           text
           tile
+          @click="overlay = !overlay"
           >关于</v-btn
         >
+        <v-alert
+          type="success"
+          v-if="overlay"
+					class="center"
+          @click="overlay = false"
+          dark
+          dismissible
+        >
+          一体化智能广域交通检测雷达
+        </v-alert>
         <div class="time_now">
           <div>{{ currentDay }}</div>
           <div class="text-right">{{ currentTime }}</div>
@@ -116,33 +126,35 @@
 <script>
 export default {
   data: () => ({
+    overlay: false,
     timer: "", //定义一个定时器的变量
-		currentTime: new Date(), // 获取当前
-		currentDay:0,
+    currentTime: new Date(), // 获取当前
+    currentDay: 0,
     on: {},
   }),
-  computed: {
-
-  },
+  computed: {},
   created: function() {
     var _this = this; //声明一个变量指向Vue实例this，保证作用域一致
     this.timer = setInterval(function() {
-
-			_this.currentDay=
+      _this.currentDay =
         new Date().getFullYear() +
         "." +
         (new Date().getMonth() + 1) +
         "." +
-        new Date().getDate() 
-			_this.currentTime = //修改数据date
+        new Date().getDate();
+      _this.currentTime = //修改数据date
         new Date().getHours() +
         ":" +
-        (new Date().getMinutes()>=9?new Date().getMinutes():"0"+new Date().getMinutes()) +
-        ": " +
-        (new Date().getSeconds()<10?'0'+new Date().getSeconds():new Date().getSeconds());
-		}, 1000)
-		
-  },beforeDestroy() {
+        (new Date().getMinutes() >= 9
+          ? new Date().getMinutes()
+          : "0" + new Date().getMinutes()) +
+        ":" +
+        (new Date().getSeconds() < 10
+          ? "0" + new Date().getSeconds()
+          : new Date().getSeconds());
+    }, 1000);
+  },
+  beforeDestroy() {
     if (this.timer) {
       clearInterval(this.timer); //清除的定时器
     }
@@ -184,7 +196,6 @@ export default {
     },
   },
 };
-
 </script>
 
 <style scoped>
@@ -245,6 +256,7 @@ html body {
 .v-toolbar__title {
   position: relative;
   overflow: hidden !important;
+	min-width: 22rem;
 }
 .logo {
   width: 2.5rem;
@@ -261,4 +273,16 @@ html body {
   float: left;
   /* padding: 35px; */
 }
+.center {
+	position: absolute;
+  width: 450px;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+	text-align: center;
+	line-height: 25px;
+
+}
+
 </style>

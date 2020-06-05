@@ -56,7 +56,9 @@
           obj.value = response.data[i].id;
           arr.push(obj);
         }
-        this.items = arr;
+				this.items = arr;
+				console.log(this.items);
+				
         if (i > 0){
           this.select = response.data[0].id;
         }          
