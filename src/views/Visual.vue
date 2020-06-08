@@ -25,6 +25,12 @@
             single-select
             @click:row="carClick"
           >
+            <template v-slot:item.xspeed="{ item }">
+                <div >{{getspped(item.xspeed)+'km/h'}}</div>
+            </template>
+            <template v-slot:item.yspeed="{ item }">
+                <div >{{getspped(item.yspeed)+'km/h'}}</div>
+            </template>
           </v-data-table>
         </div>
         <v-card-text class="location">
@@ -344,6 +350,7 @@ export default {
         if (topic == "ui/objects") {
           var objs = JSON.parse(payload);
           this.desserts = objs.objs;
+
           this.getConfigParams(objs.status);
           this.drawCars(objs.objs);
         }
@@ -519,8 +526,8 @@ export default {
               car.attr({ fill: "#0FF" });
             }
           }
-					car.xxx = objs[i].xpos;
-					car.id=objs[i].id
+          car.xxx = objs[i].xpos;
+          car.id = objs[i].id;
           car.ckind = objs[i].kind;
           car.ckind = objs[i].kind;
           car.clane = objs[i].lane;
@@ -567,11 +574,10 @@ export default {
       this.preCars.forEach((item, key) => {
         var car = this.cars.get(key);
         if (car != null) {
-					car.remove();
-					this.clickCar={}
-					this.id=''
-					this.eve='正常行驶'
-					
+          car.remove();
+          this.clickCar = {};
+          this.id = "";
+          this.eve = "正常行驶";
         }
         this.cars.delete(key);
       });
@@ -601,7 +607,7 @@ html body {
   height: 12.5rem;
 }
 .massage_main {
-	overflow:scroll;
+  overflow: scroll;
   height: 18.75rem;
   margin-top: 10px;
   width: 100%;

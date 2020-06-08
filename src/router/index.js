@@ -16,6 +16,21 @@ Vue.use(VueRouter)
     component: () => import(/* webpackChunkName: "about" */ '../views/QueryStat.vue')
   },
   {
+    path: '/sysreset',
+    name: 'SysReset',
+    component: () => import(/* webpackChunkName: "about" */ '../views/SysReset.vue')
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "about" */ '../views/login.vue')
+  },
+  {
+    path: '/changpassword',
+    name: 'changPassword',
+    component: () => import(/* webpackChunkName: "about" */ '../views/changPassword.vue')
+  },
+  {
     path: '/queryEvent',
     name: 'QueryEvent',
     component: () => import(/* webpackChunkName: "about" */ '../views/QueryEvent.vue')

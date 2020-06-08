@@ -12,13 +12,6 @@
           <span class="vison">v1.05</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <!-- <v-btn>
-        small 
-        dark  
-        class="ma-4"
-        v-on:click="onAbout"
-      >Test</v-btn> -->
-
         <v-btn
           tile
           dark
@@ -87,6 +80,9 @@
             <v-list-item v-on:click="onSetWinding">
               <v-list-item-title>虚拟线圈</v-list-item-title>
             </v-list-item>
+            <v-list-item v-on:click="changePassword">
+              <v-list-item-title>修改密码</v-list-item-title>
+            </v-list-item>
           </v-list>
         </v-menu>
         <v-btn
@@ -98,10 +94,18 @@
           @click="overlay = !overlay"
           >关于</v-btn
         >
+        <v-btn
+          dark
+          class="ma-4"
+          id="initialization"
+          text
+          tile
+          @click="sysRest"
+          >系统维护</v-btn
+        >
         <v-alert
-          type="success"
+          class="center lighten-2"
           v-if="overlay"
-					class="center"
           @click="overlay = false"
           dark
           dismissible
@@ -134,6 +138,9 @@ export default {
   }),
   computed: {},
   created: function() {
+
+
+		
     var _this = this; //声明一个变量指向Vue实例this，保证作用域一致
     this.timer = setInterval(function() {
       _this.currentDay =
@@ -160,6 +167,13 @@ export default {
     }
   },
   methods: {
+		sysRest(){
+      this.$router.push("SysReset");
+
+		},
+    changePassword() {
+      this.$router.push("changPassword");
+    },
     onVisual: function() {
       this.$router.push("Visual");
     },
@@ -256,7 +270,7 @@ html body {
 .v-toolbar__title {
   position: relative;
   overflow: hidden !important;
-	min-width: 22rem;
+  min-width: 22rem;
 }
 .logo {
   width: 2.5rem;
@@ -274,15 +288,13 @@ html body {
   /* padding: 35px; */
 }
 .center {
-	position: absolute;
+  position: absolute;
   width: 450px;
   height: 200px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, 50%);
-	text-align: center;
-	line-height: 25px;
-
+  text-align: center;
+  line-height: 25px;
 }
-
 </style>
