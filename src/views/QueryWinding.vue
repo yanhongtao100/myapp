@@ -32,6 +32,10 @@
         item-key="index"
         no-data-text
       >
+        <template v-slot:item.trigger="{ item }">
+          <div v-if="item.trigger==0">未触发</div>
+          <div v-if="item.trigger==1">触发</div>
+        </template>
       </v-data-table>
     </v-container>
   </div>
@@ -45,7 +49,9 @@ export default {
       .get(api)
       .then((response) => {
         var arr = [];
-        var len = response.data.length;
+				var len = response.data.length;
+
+				
         if (len == 0) {
           this.$toasted.info("未定义线圈", {
             theme: "toasted-primary",
@@ -83,7 +89,8 @@ export default {
         .get(api, param)
         .then((response) => {
           var arr = [];
-          var len = response.data.length;
+					var len = response.data.length;
+									console.log(response);
           if (len == 0) {
             this.$toasted.info("未查询到数据", {
               theme: "toasted-primary",

@@ -1,7 +1,6 @@
 <template>
   <div>
     <h-title></h-title>
-    <h_title></h_title>
     <div class="container">
       <v-row class="login_box">
         <div class="center_box">
@@ -21,7 +20,7 @@
               <v-col cols="10">
                 <v-text-field
                   class=""
-                  placeholder="请输入新密码"
+                  placeholder="请输入新账号"
                   v-model="from.username"
                   required
                   single-line
@@ -33,7 +32,7 @@
               <v-col cols="10">
                 <v-text-field
                   class=""
-                  placeholder="再次输入新密码"
+                  placeholder="请输入新密码"
                   v-model="from.password"
                   :counter="16"
                   :type="'password'"
@@ -79,8 +78,8 @@ export default {
   beforeRouteUpdate() {},
   methods: {
     onSet() {
-      if (this.from.username == "" || this.from.password == "") {
-        this.$toasted.error("密码不能为空", {
+      if (this.from.username == "" | this.from.password == "") {
+        this.$toasted.error("账号密码不能为空", {
           position: "bottom-center",
           duration: 2000,
         });

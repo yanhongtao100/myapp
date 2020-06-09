@@ -291,6 +291,16 @@ export default {
       })
       .catch((error) => {
         this.$toasted.show(error);
+			});
+			
+			
+    this.$http
+      .get("/api/param/radar")
+      .then((res) => {
+				this.roadLength = res.data.distance;
+      })
+      .catch((error) => {
+        this.$toasted.show(error);
       });
 
     //获取车道

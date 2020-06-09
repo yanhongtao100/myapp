@@ -71,7 +71,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.mileage"
-              label="mileage"
+              label="英里数"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -79,7 +79,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.longitude"
-              label="longitude"
+              label="经度"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -87,7 +87,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.latitude"
-              label="latitude"
+              label="纬度"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -102,7 +102,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.prevpos"
-              label="prevpos"
+              label="上一融合目标"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -110,7 +110,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.nextpos"
-              label="nextpos"
+              label="下一融合目标"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -164,7 +164,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.videoip"
-              label="videoip"
+              label="视频IP"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -172,7 +172,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.videoport"
-              label="videoport"
+              label="视频端口"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -180,7 +180,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.videouser"
-              label="videouser"
+              label="视频用户名"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -188,7 +188,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.videopass"
-              label="videopass"
+              label="视频密码"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -203,7 +203,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.checkip"
-              label="checkip"
+              label="卡口IP"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -211,7 +211,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.checkport"
-              label="checkport"
+              label="卡口端口"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -219,7 +219,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.checkuser"
-              label="checkuser"
+              label="卡口用户名"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -227,7 +227,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.checkpass"
-              label="checkpass"
+              label="卡口密码"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -242,7 +242,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.timeip"
-              label="timeip"
+              label="时间IP"
               :rules="dataRules"
               required
             ></v-text-field>

@@ -30,6 +30,25 @@
         item-key="index"
         no-data-text
       >
+        <template v-slot:item.kind="{ item }">
+          <div v-if="item.kind == 0">小型车</div>
+          <div v-if="item.kind == 3">中型车</div>
+          <div v-if="item.kind == 4">大型车</div>
+        </template>
+
+
+
+        <template v-slot:item.event="{ item }">
+          <div v-if="item.event == 0">正常行驶</div>
+          <div v-if="item.event == 1">畅通停车</div>
+          <div v-if="item.event == 2">拥堵停车</div>
+          <div v-if="item.event == 4">车辆超速</div>
+          <div v-if="item.event == 8">交通事故</div>
+          <div v-if="item.event == 16">慢行车辆</div>
+          <div v-if="item.event == 32">行人</div>
+          <div v-if="item.event == 64">逆行车辆</div>
+          <div v-if="item.event == 128">抛撒物</div>
+        </template>
       </v-data-table>
     </v-container>
   </div>
@@ -81,7 +100,6 @@ export default {
     headers: [
       { text: "ID", value: "id", width: 100 },
       { text: "时间", value: "time" },
-      { text: "车型", value: "kind" },
       { text: "目标类型", value: "kind" },
       { text: "所在车道", value: "lane" },
       { text: "发生事件", value: "event" },

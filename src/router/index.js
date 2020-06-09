@@ -77,7 +77,7 @@ Vue.use(VueRouter)
   },
   {
     path: '/', 
-    redirect: '/visual' 
+    redirect: '/login' 
   },
 ]
 

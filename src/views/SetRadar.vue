@@ -40,6 +40,14 @@
               required
             ></v-text-field>
           </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.distance"
+              label="检测距离"
+              :rules="[numberRules]"
+              required
+            ></v-text-field>
+          </v-col>
         </v-row>
         <v-col cols="6" class="padding_none">
           <span class="title font-weight-bold">安装参数</span>
@@ -224,7 +232,9 @@ export default {
     this.$http
       .get(api)
       .then((response) => {
-        this.p = response.data;
+				this.p = response.data;
+				console.log(response);
+				
       })
       .catch((error) => {
         this.$toasted.show(error);

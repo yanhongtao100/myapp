@@ -1,59 +1,44 @@
 <template>
   <div>
     <h-title></h-title>
-    <div class="reset_container">
-      <div class="box">
-        <v-hover v-slot:default="{ hover }" open-delay="200">
-          <v-card
-            :elevation="hover ? 16 : 2"
-            class="mx-auto"
-            height="350"
-            max-width="350"
+    <v-row>
+      <v-col cols="12">
+        <span class="title font-weight-bold">系统设置</span>
+      </v-col>
+      <v-row>
+        <v-col cols="12"
+          ><span class="text_resert">系统重启</span>
+          <v-btn class="btn_reset" color="primary" @click="reBoot">重启</v-btn>
+        </v-col>
+      </v-row>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <span class="title font-weight-bold">时间设置</span>
+      </v-col>
+      <div class="time_box">
+        <v-row>
+          <v-col cols="10">
+            <v-datetime-picker label="选择时间" v-model="result2">
+            </v-datetime-picker>
+          </v-col>
+          <v-col cols="2"
+            ><v-btn color="primary" @click="setTime">提交</v-btn></v-col
           >
-            <div class="left_box" @click="overlay = true"></div>
-          </v-card>
-        </v-hover>
-        <v-hover v-slot:default="{ hover }" open-delay="200">
-          <v-card
-            :elevation="hover ? 16 : 2"
-            class="mx-auto"
-            height="350"
-            max-width="350"
-          >
-            <div class="right_box" @click="overlay1 = true"></div>
-          </v-card>
-        </v-hover>
+        </v-row>
       </div>
-      <v-overlay :absolute="absolute" :value="overlay" class="ov_box">
-        <h2>你确定要重启吗？</h2>
-        <div class="flex">
-          <v-btn color="success" @click="reBoot" class="butn">
-            是
-          </v-btn>
-          <v-btn color="error" @click="overlay = false" class="btnn">
-            否
-          </v-btn>
-        </div>
-      </v-overlay>
-
-      <v-overlay :absolute="absolute" :value="overlay1" class="ov_box">
-        <set-time @childByValue="ByValue"></set-time>
-      </v-overlay>
-    </div>
+    </v-row>
   </div>
 </template>
 
 <script>
-import setTime from "../views/setTime";
 export default {
   name: "SysReset",
-  components: {
-    "set-time": setTime,
-  },
+  components: {},
   props: {},
   data() {
     return {
-      result2: null,
+      result2: new Date(),
       absolute: true,
       overlay: false,
       overlay1: false,
@@ -65,16 +50,6 @@ export default {
   update() {},
   beforeRouteUpdate() {},
   methods: {
-    ByValue(data) {
-      this.overlay1 = data;
-    },
-    formatDatetime: function(datetime) {
-      if (datetime === null) {
-        return "[null]";
-      } else {
-        return datetime.format("YYYY-MM-DD HH:mm:ss");
-      }
-    },
     async reBoot() {
       const res = await this.$http.get(`/api/reboot`);
       console.log(res);
@@ -82,6 +57,27 @@ export default {
       this.$toasted.success("设备重启成功", {
         position: "bottom-center",
         duration: 2000,
+      });
+    },
+    setTime() {
+      var dt =
+        this.result2.getFullYear() +
+        "-" +
+        (this.result2.getMonth() + 1) +
+        "-" +
+        this.result2.getDate() +
+        " " +
+        this.result2.getHours() +
+        ":" +
+        this.result2.getMinutes() +
+        ":" +
+        this.result2.getSeconds();
+      this.$http.get(`/api/settime`, dt).then((res) => {
+        console.log(res, dt);
+        this.$toasted.success("设置成功", {
+          position: "bottom-center",
+          duration: 2000,
+        });
       });
     },
   },
@@ -96,51 +92,14 @@ html body {
   width: 100%;
   height: 100%;
 }
-.reset_container {
-  width: 100%;
-  height: 92.5vh;
-  background-image: linear-gradient(to right, #359edb, #014fba);
-}
-.box {
-  width: 1024px;
-  height: 500px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.left_box {
-  cursor: pointer;
-  width: 300px;
-  height: 300px;
-  background: url(../assets/373650b5a4f234152ff160142a82be9.png);
-}
-.right_box {
-  cursor: pointer;
-  width: 300px;
-  height: 300px;
-  background: url(../assets/09f6a9c7261581972410d6cdec0f2c9.png);
-}
-h2 {
-  font-size: 40px;
-}
-.flex {
-  width: 100px;
-  height: 50px;
-  display: flex;
-  transform: translate(100%, 0);
-  justify-content: center;
-  align-content: space-around;
-}
-.btnn {
+.text_resert {
+  font-size: 20px;
   margin-left: 50px;
-  margin-top: 50px;
 }
-.butn {
-  margin-top: 50px;
+.time_box {
+  margin-left: 50px;
+}
+.btn_reset {
+  margin-left: 160px;
 }
 </style>
