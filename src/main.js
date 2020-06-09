@@ -8,12 +8,16 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Toasted from 'vue-toasted';
 import qs from 'qs'
+import header from '../src/views/header.vue'
+
 
 Vue.config.productionTip = false;
 
 Vue.use(VueAxios, axios);
 Vue.use(DatetimePicker);
 Vue.use(Toasted);
+Vue.component(header)
+
 
 Vue.prototype.$qs = qs;
 

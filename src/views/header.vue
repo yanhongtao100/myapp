@@ -1,11 +1,10 @@
 <template>
-  <v-app>
     <div>
       <v-app-bar app color="blue darken-4" dark flat>
         <v-toolbar-title>
           <img
             class="logo"
-            src="../src/assets/899b078a070d1b65e4d815182ccdb84.jpg"
+            src="../../src/assets/899b078a070d1b65e4d815182ccdb84.jpg"
             alt=""
           />
           <span id="title">一体化智能广域交通检测雷达</span>
@@ -129,11 +128,9 @@
 
       <v-content>
         <transition name="fade-transform" mode="out-in">
-          <router-view />
         </transition>
       </v-content>
     </div>
-  </v-app>
 </template>
 
 <script>

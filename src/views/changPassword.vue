@@ -12,13 +12,13 @@
         </div>
         <v-card width="400" height="350" class="login_input">
           <v-row class="text_center" style="margin-top:50px">
-            <v-col cols="10" class="title_user" >
-              用户登录
+            <v-col cols="10" class="title_user">
+              密码修改
             </v-col>
             <v-col cols="10">
               <v-text-field
                 class=""
-                placeholder="请输入账号"
+                placeholder="请输入新密码"
                 v-model="from.username"
                 required
                 single-line
@@ -30,7 +30,7 @@
             <v-col cols="10">
               <v-text-field
                 class=""
-                placeholder="请输入密码"
+                placeholder="再次输入新密码"
                 v-model="from.password"
                 :counter="16"
                 :type="'password'"
@@ -42,7 +42,7 @@
           </v-row>
           <v-row class="text_center">
             <v-btn class="float-right" color="primary" block v-on:click="onSet"
-              >登录</v-btn
+              >修改</v-btn
             >
           </v-row>
         </v-card>
@@ -71,13 +71,19 @@ export default {
   beforeRouteUpdate() {},
   methods: {
     onSet() {
-      if ((this.from.username === "") | (this.from.passworld === "")) {
-        this.$toasted.error("请输入账号或密码", {
+      if (this.from.username == "" || this.from.password == "") {
+        this.$toasted.error("密码不能为空", {
+          position: "bottom-center",
+          duration: 2000,
+        });
+      }
+      else if (this.from.username != this.from.password) {
+        this.$toasted.error("密码输入错误", {
           position: "bottom-center",
           duration: 2000,
         });
         console.log(1);
-      } else {
+      } else if (this.from.username === this.from.password) {
         this.$http
           .get(`/api/param/setpass`, this.$qs.stringify(this.from))
           .then((response) => {
@@ -103,12 +109,12 @@ export default {
 </script>
 
 <style scoped>
-.img_login{
-	margin: 40px 0 0 35px;
+.img_login {
+  margin: 40px 0 0 35px;
 }
-h2{
-	font-size: 36px;
-	color: aliceblue;
+h2 {
+  font-size: 36px;
+  color: aliceblue;
 }
 .text_center {
   text-align: center;
@@ -117,12 +123,12 @@ h2{
 .col {
   padding: 0 !important;
 }
-.title_user{
-	font-size: 24px;
-	margin-top: -10px;
-	margin-bottom: 20px;
-	font-weight: 700;
-} 
+.title_user {
+  font-size: 24px;
+  margin-top: -10px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
 .container {
   margin: 0 !important;
   padding: 0 !important;
@@ -134,13 +140,13 @@ h2{
 .center_box {
   width: 1300px;
   height: 650px;
-	display: flex;
-	justify-content: space-evenly;
-	align-items: center;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
   position: absolute;
   top: 50%;
   left: 50%;
-transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 .login_box {
   width: 100%;
