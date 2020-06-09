@@ -16,7 +16,7 @@ Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
 Vue.use(DatetimePicker);
 Vue.use(Toasted);
-Vue.component(header)
+Vue.component('h-title',header)
 
 
 Vue.prototype.$qs = qs;

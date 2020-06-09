@@ -1,42 +1,45 @@
 <template>
-  <div class="reset_container">
-    <div class="box">
-      <v-hover v-slot:default="{ hover }" open-delay="200">
-        <v-card
-          :elevation="hover ? 16 : 2"
-          class="mx-auto"
-          height="350"
-          max-width="350"
-        >
-          <div class="left_box" @click="overlay = true"></div>
-        </v-card>
-      </v-hover>
-      <v-hover v-slot:default="{ hover }" open-delay="200">
-        <v-card
-          :elevation="hover ? 16 : 2"
-          class="mx-auto"
-          height="350"
-          max-width="350"
-        >
-          <div class="right_box" @click="overlay1 = true"></div>
-        </v-card>
-      </v-hover>
-    </div>
-    <v-overlay :absolute="absolute" :value="overlay" class="ov_box">
-      <h2>你确定要重启吗？</h2>
-      <div class="flex">
-        <v-btn color="success" @click="reBoot" class="butn">
-          是
-        </v-btn>
-        <v-btn color="error" @click="overlay = false" class="btnn">
-          否
-        </v-btn>
+  <div>
+    <h-title></h-title>
+    <div class="reset_container">
+      <div class="box">
+        <v-hover v-slot:default="{ hover }" open-delay="200">
+          <v-card
+            :elevation="hover ? 16 : 2"
+            class="mx-auto"
+            height="350"
+            max-width="350"
+          >
+            <div class="left_box" @click="overlay = true"></div>
+          </v-card>
+        </v-hover>
+        <v-hover v-slot:default="{ hover }" open-delay="200">
+          <v-card
+            :elevation="hover ? 16 : 2"
+            class="mx-auto"
+            height="350"
+            max-width="350"
+          >
+            <div class="right_box" @click="overlay1 = true"></div>
+          </v-card>
+        </v-hover>
       </div>
-    </v-overlay>
+      <v-overlay :absolute="absolute" :value="overlay" class="ov_box">
+        <h2>你确定要重启吗？</h2>
+        <div class="flex">
+          <v-btn color="success" @click="reBoot" class="butn">
+            是
+          </v-btn>
+          <v-btn color="error" @click="overlay = false" class="btnn">
+            否
+          </v-btn>
+        </div>
+      </v-overlay>
 
-    <v-overlay :absolute="absolute" :value="overlay1" class="ov_box">
-      <set-time @childByValue="ByValue"></set-time>
-    </v-overlay>
+      <v-overlay :absolute="absolute" :value="overlay1" class="ov_box">
+        <set-time @childByValue="ByValue"></set-time>
+      </v-overlay>
+    </div>
   </div>
 </template>
 
@@ -64,10 +67,6 @@ export default {
   methods: {
     ByValue(data) {
       this.overlay1 = data;
-      this.$toasted.success("设置成功", {
-        position: "bottom-center",
-        duration: 2000,
-      });
     },
     formatDatetime: function(datetime) {
       if (datetime === null) {

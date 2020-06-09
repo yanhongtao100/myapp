@@ -1,163 +1,166 @@
 <template>
-  <div id="hidden">
-    <v-card id="container" class="pa-4 mb-4">
-      <svg id="tunnel"></svg>
-    </v-card>
-    <div class="main_ms">
-      <div class="video_main">
-        <div>
-          <v-btn color="primary" class="video_btn" small top>打开视频</v-btn>
-          <span class="ip">IP:192.108.1.1</span>
-          <span class="state">状态：未连接</span>
+  <div>
+    <h-title></h-title>
+    <div>
+      <v-card id="container" class="pa-4 mb-4">
+        <svg id="tunnel"></svg>
+      </v-card>
+      <div class="main_ms">
+        <div class="video_main">
+          <div>
+            <v-btn color="primary" class="video_btn" small top>打开视频</v-btn>
+            <span class="ip">IP:192.108.1.1</span>
+            <span class="state">状态：未连接</span>
+          </div>
+          <v-card-text class="pa-4 mb-4 border_black "></v-card-text>
         </div>
-        <v-card-text class="pa-4 mb-4 border_black "></v-card-text>
-      </div>
-      <div class="message_container">
-        <div class="massage_main">
-          <v-data-table
-            dense
-            disable-sort
-            hide-default-footer
-            :headers="headers"
-            :items="desserts"
-            item-key="id"
-            disable-pagination
-            single-select
-            @click:row="carClick"
-          >
-            <template v-slot:item.xspeed="{ item }">
-                <div >{{getspped(item.xspeed)+'km/h'}}</div>
-            </template>
-            <template v-slot:item.yspeed="{ item }">
-                <div >{{getspped(item.yspeed)+'km/h'}}</div>
-            </template>
-          </v-data-table>
+        <div class="message_container">
+          <div class="massage_main">
+            <v-data-table
+              dense
+              disable-sort
+              hide-default-footer
+              :headers="headers"
+              :items="desserts"
+              item-key="id"
+              disable-pagination
+              single-select
+              @click:row="carClick"
+            >
+              <template v-slot:item.xspeed="{ item }">
+                <div>{{ getspped(item.xspeed) + "km/h" }}</div>
+              </template>
+              <template v-slot:item.yspeed="{ item }">
+                <div>{{ getspped(item.yspeed) + "km/h" }}</div>
+              </template>
+            </v-data-table>
+          </div>
+          <v-card-text class="location">
+            <div class="message">
+              <div class="left">
+                <div>目标ID：</div>
+                <div>车型：</div>
+                <div>X坐标：</div>
+                <div>车头时距：</div>
+              </div>
+              <div class="right">
+                <div>{{ id }}</div>
+                <div v-if="clickCar.ckind === 0">
+                  小型车
+                </div>
+                <div v-else-if="clickCar.ckind == 3">
+                  中型车
+                </div>
+                <div v-else-if="clickCar.ckind == 4">
+                  大型车
+                </div>
+                <div v-else></div>
+                <div>{{ clickCar.xxx }}</div>
+                <div>{{ clickCar.ctimespan }}</div>
+              </div>
+              <div class="left">
+                <div>车道：</div>
+                <div class="blank"></div>
+                <div>Y坐标：</div>
+                <div>车头间距：</div>
+              </div>
+              <div class="right">
+                <div>{{ clickCar.clane }}</div>
+                <div class="blank"></div>
+                <div>{{ clickCar.cypos }}</div>
+                <div>{{ clickCar.cspace }}</div>
+              </div>
+            </div>
+            <div class="speed">
+              <div class="real_time">实时速度</div>
+              <i class="big-font">{{ getspped(clickCar.yspeed) }}</i>
+              <span class="small_font">Km/H</span>
+              <div class="waring" :class="{ routine: getclass }">
+                {{ eve }}
+              </div>
+            </div>
+          </v-card-text>
+          <v-card-text class="machine_state">
+            <div class="local">
+              <div class="left">
+                <div>本机ECU：</div>
+                <div>前ECU：</div>
+                <div>联动视频：</div>
+              </div>
+              <div class="right">
+                <div
+                  :class="{
+                    error_msg: configParams.local_ecu == 1 ? false : true,
+                  }"
+                >
+                  {{ computingMode(configParams.local_ecu) }}
+                </div>
+                <div
+                  :class="{
+                    error_msg: configParams.front_ecu == 1 ? false : true,
+                  }"
+                >
+                  {{ computingMode(configParams.front_ecu) }}
+                </div>
+                <div
+                  :class="{
+                    error_msg: configParams.linkage_video == 1 ? false : true,
+                  }"
+                >
+                  {{ computingMode(configParams.linkage_video) }}
+                </div>
+              </div>
+              <div class="left">
+                <div>雷达传感器：</div>
+                <div>后ECU：</div>
+                <div>联动卡口：</div>
+              </div>
+              <div class="right">
+                <div
+                  :class="{
+                    error_msg: configParams.vadar_senso == 1 ? false : true,
+                  }"
+                >
+                  {{ computingMode(configParams.vadar_senso) }}
+                </div>
+                <div
+                  :class="{
+                    error_msg: configParams.quee_ecu == 1 ? false : true,
+                  }"
+                >
+                  {{ computingMode(configParams.quee_ecu) }}
+                </div>
+                <div
+                  :class="{
+                    error_msg: configParams.linkage_bayonet == 1 ? false : true,
+                  }"
+                >
+                  {{ computingMode(configParams.linkage_bayonet) }}
+                </div>
+              </div>
+            </div>
+            <div class="fle">
+              <div class="text">
+                <div>CPU：</div>
+                <div>存储：</div>
+              </div>
+              <div class="box">
+                <div class="histogram">
+                  <div
+                    class="cpu_fill"
+                    :style="{ width: configParams.cpu_num + '%' }"
+                  ></div>
+                </div>
+                <div class="histogram">
+                  <div
+                    class="memory_fill"
+                    :style="{ width: configParams.disk + '%' }"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </v-card-text>
         </div>
-        <v-card-text class="location">
-          <div class="message">
-            <div class="left">
-              <div>目标ID：</div>
-              <div>车型：</div>
-              <div>X坐标：</div>
-              <div>车头时距：</div>
-            </div>
-            <div class="right">
-              <div>{{ id }}</div>
-              <div v-if="clickCar.ckind === 0">
-                小型车
-              </div>
-              <div v-else-if="clickCar.ckind == 3">
-                中型车
-              </div>
-              <div v-else-if="clickCar.ckind == 4">
-                大型车
-              </div>
-              <div v-else></div>
-              <div>{{ clickCar.xxx }}</div>
-              <div>{{ clickCar.ctimespan }}</div>
-            </div>
-            <div class="left">
-              <div>车道：</div>
-              <div class="blank"></div>
-              <div>Y坐标：</div>
-              <div>车头间距：</div>
-            </div>
-            <div class="right">
-              <div>{{ clickCar.clane }}</div>
-              <div class="blank"></div>
-              <div>{{ clickCar.cypos }}</div>
-              <div>{{ clickCar.cspace }}</div>
-            </div>
-          </div>
-          <div class="speed">
-            <div class="real_time">实时速度</div>
-            <i class="big-font">{{ getspped(clickCar.yspeed) }}</i>
-            <span class="small_font">Km/H</span>
-            <div class="waring" :class="{ routine: getclass }">
-              {{ eve }}
-            </div>
-          </div>
-        </v-card-text>
-        <v-card-text class="machine_state">
-          <div class="local">
-            <div class="left">
-              <div>本机ECU：</div>
-              <div>前ECU：</div>
-              <div>联动视频：</div>
-            </div>
-            <div class="right">
-              <div
-                :class="{
-                  error_msg: configParams.local_ecu == 1 ? false : true,
-                }"
-              >
-                {{ computingMode(configParams.local_ecu) }}
-              </div>
-              <div
-                :class="{
-                  error_msg: configParams.front_ecu == 1 ? false : true,
-                }"
-              >
-                {{ computingMode(configParams.front_ecu) }}
-              </div>
-              <div
-                :class="{
-                  error_msg: configParams.linkage_video == 1 ? false : true,
-                }"
-              >
-                {{ computingMode(configParams.linkage_video) }}
-              </div>
-            </div>
-            <div class="left">
-              <div>雷达传感器：</div>
-              <div>后ECU：</div>
-              <div>联动卡口：</div>
-            </div>
-            <div class="right">
-              <div
-                :class="{
-                  error_msg: configParams.vadar_senso == 1 ? false : true,
-                }"
-              >
-                {{ computingMode(configParams.vadar_senso) }}
-              </div>
-              <div
-                :class="{
-                  error_msg: configParams.quee_ecu == 1 ? false : true,
-                }"
-              >
-                {{ computingMode(configParams.quee_ecu) }}
-              </div>
-              <div
-                :class="{
-                  error_msg: configParams.linkage_bayonet == 1 ? false : true,
-                }"
-              >
-                {{ computingMode(configParams.linkage_bayonet) }}
-              </div>
-            </div>
-          </div>
-          <div class="fle">
-            <div class="text">
-              <div>CPU：</div>
-              <div>存储：</div>
-            </div>
-            <div class="box">
-              <div class="histogram">
-                <div
-                  class="cpu_fill"
-                  :style="{ width: configParams.cpu_num + '%' }"
-                ></div>
-              </div>
-              <div class="histogram">
-                <div
-                  class="memory_fill"
-                  :style="{ width: configParams.disk + '%' }"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </v-card-text>
       </div>
     </div>
   </div>

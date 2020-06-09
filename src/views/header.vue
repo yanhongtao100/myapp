@@ -1,5 +1,6 @@
 <template>
-    <div>
+<div>
+    <div class="head">
       <v-app-bar app color="blue darken-4" dark flat>
         <v-toolbar-title>
           <img
@@ -131,6 +132,8 @@
         </transition>
       </v-content>
     </div>
+			<div class="space"></div>
+			</div>
 </template>
 
 <script>
@@ -207,6 +210,18 @@ export default {
 <style scoped>
 html body {
   min-width: 62.5rem;
+}
+.space{
+	height: 60px;
+	width: 100%;
+}
+.head{
+	position: fixed;
+	width: 100%;
+	height: 60px;
+	top: 0;
+	left: 0;
+	z-index: 1;
 }
 .fade-enter-active,
 .fade-leave-active {

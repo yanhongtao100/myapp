@@ -1,34 +1,39 @@
 <template>
-  <v-container>
-    <v-row dense>
-      <v-col cols="6" class="mt-2">
-        <span class="title font-weight-bold">虚拟断面</span>
-      </v-col>
-      <v-col cols="6">
-        <v-btn class="float-right" color="primary" @click="setAll">设置生效</v-btn>
-      </v-col>
-    </v-row>
+  <div>
+    <h-title></h-title>
+    <v-container>
+      <v-row dense>
+        <v-col cols="6" class="mt-2">
+          <span class="title font-weight-bold">虚拟断面</span>
+        </v-col>
+        <v-col cols="6">
+          <v-btn class="float-right" color="primary" @click="setAll"
+            >设置生效</v-btn
+          >
+        </v-col>
+      </v-row>
 
-    <v-data-table
-      disable-sort
-      :headers="headers"
-      :items="desserts"
-      item-key="index"
-      no-data-text
-    >
-      <template v-slot:item.using="{ item }">
-        <v-chip @click="changeUsing(item)">
-          <div v-if="item.using == 1">使用</div>
-          <div v-else-if="item.using == 0">停用</div></v-chip
-        >
-      </template>
-      <template v-slot:item.pos="{ item }">
-        <div v-if="item.pos == 1">上行</div>
-        <div v-else-if="item.pos == 2">下行</div>
-        <div v-else-if="item.pos == 3">全部</div>
-      </template>
-    </v-data-table>
-  </v-container>
+      <v-data-table
+        disable-sort
+        :headers="headers"
+        :items="desserts"
+        item-key="index"
+        no-data-text
+      >
+        <template v-slot:item.using="{ item }">
+          <v-chip @click="changeUsing(item)">
+            <div v-if="item.using == 1">使用</div>
+            <div v-else-if="item.using == 0">停用</div></v-chip
+          >
+        </template>
+        <template v-slot:item.pos="{ item }">
+          <div v-if="item.pos == 1">上行</div>
+          <div v-else-if="item.pos == 2">下行</div>
+          <div v-else-if="item.pos == 3">全部</div>
+        </template>
+      </v-data-table>
+    </v-container>
+  </div>
 </template>
 
 <script>

@@ -54,8 +54,7 @@ export default {
   beforeRouteUpdate() {},
   methods: {
     byValue() {
-			this.$emit("childByValue", this.overlay1);
-			
+      this.$emit("childByValue", this.overlay1);
     },
     setTime() {
       //写到这儿了
@@ -64,6 +63,10 @@ export default {
 
       this.$http.get(`/api/settime`, dt).then((res) => {
         console.log(res);
+        this.$toasted.success("设置成功", {
+          position: "bottom-center",
+          duration: 2000,
+        });
         this.byValue();
         // this.$router.go(0);
       });
@@ -98,14 +101,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .datepicker {
   margin: 5px;
   box-shadow: #014fba 0px 2px 5px;
   border-radius: 5px;
 }
 .datepicker > input {
-  color: aliceblue;
+  color: aliceblue !important;
 }
 .flex {
   display: flex;

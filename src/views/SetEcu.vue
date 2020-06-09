@@ -1,254 +1,256 @@
 <template>
-  <v-container>
-    <v-row dense>
-      <v-col cols="6">
-        <span class="title font-weight-bold">ECU参数</span>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col cols="6">
-        <v-btn class="float-right" color="primary" v-on:click="onSet"
-          >更新参数</v-btn
-        >
-      </v-col>
-    </v-row>
-    <v-form ref="form" v-model="valid" lazy-validation>
-
-      <v-row>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.id"
-            label="ECU编号"
-            :rules="dataRules"
-            required
-          ></v-text-field>
+  <div>
+    <h-title></h-title>
+    <v-container>
+      <v-row dense>
+        <v-col cols="6">
+          <span class="title font-weight-bold">ECU参数</span>
         </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.ip"
-            label="设备ip地址"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.netmask"
-            label="子网掩码"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.gateway"
-            label="网关"
-            :rules="dataRules"
-            required
-          ></v-text-field>
+        <v-spacer></v-spacer>
+        <v-col cols="6">
+          <v-btn class="float-right" color="primary" v-on:click="onSet"
+            >更新参数</v-btn
+          >
         </v-col>
       </v-row>
-      <v-col cols="12" class="padding_none">
-        <span class="title font-weight-bold">位置参数</span>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-row>
-        <v-col cols="12" md="3">
-           <v-select
-          v-model= "select"
-          :items = "items"
-          label="安装方向"
-        ></v-select>
+      <v-form ref="form" v-model="valid" lazy-validation>
+        <v-row>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.id"
+              label="ECU编号"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.ip"
+              label="设备ip地址"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.netmask"
+              label="子网掩码"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.gateway"
+              label="网关"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-col cols="12" class="padding_none">
+          <span class="title font-weight-bold">位置参数</span>
         </v-col>
+        <v-spacer></v-spacer>
+        <v-row>
+          <v-col cols="12" md="3">
+            <v-select
+              v-model="select"
+              :items="items"
+              label="安装方向"
+            ></v-select>
+          </v-col>
 
-        <v-col cols="12" md="3">
-          <v-select
-          v-model= "select2"
-          :items = "wItem"
-          label="安装位置"
-        ></v-select>
+          <v-col cols="12" md="3">
+            <v-select
+              v-model="select2"
+              :items="wItem"
+              label="安装位置"
+            ></v-select>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.mileage"
+              label="mileage"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.longitude"
+              label="longitude"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.latitude"
+              label="latitude"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-col cols="12" class="padding_none">
+          <span class="title font-weight-bold">目标融合参数</span>
         </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.mileage"
-            label="mileage"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.longitude"
-            label="longitude"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.latitude"
-            label="latitude"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-col cols="12" class="padding_none">
-        <span class="title font-weight-bold">目标融合参数</span>
-      </v-col>
-      <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
 
-      <v-row>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.prevpos"
-            label="prevpos"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.nextpos"
-            label="nextpos"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
+        <v-row>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.prevpos"
+              label="prevpos"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.nextpos"
+              label="nextpos"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
 
-      <v-col cols="12" class="padding_none">
-        <span class="title font-weight-bold">雷达参数</span>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-row>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.radarip"
-            label="雷达IP"
-            :rules="dataRules"
-            required
-          ></v-text-field>
+        <v-col cols="12" class="padding_none">
+          <span class="title font-weight-bold">雷达参数</span>
         </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.previp"
-            label="前一雷达IP"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.nextip"
-            label="后一雷达IP"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.distance"
-            label="雷达检测距离"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
+        <v-spacer></v-spacer>
+        <v-row>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.radarip"
+              label="雷达IP"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.previp"
+              label="前一雷达IP"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.nextip"
+              label="后一雷达IP"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.distance"
+              label="雷达检测距离"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
 
-      <v-col cols="12" class="padding_none">
-        <span class="title font-weight-bold">视频联动参数</span>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-row>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.videoip"
-            label="videoip"
-            :rules="dataRules"
-            required
-          ></v-text-field>
+        <v-col cols="12" class="padding_none">
+          <span class="title font-weight-bold">视频联动参数</span>
         </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.videoport"
-            label="videoport"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.videouser"
-            label="videouser"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.videopass"
-            label="videopass"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
+        <v-spacer></v-spacer>
+        <v-row>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.videoip"
+              label="videoip"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.videoport"
+              label="videoport"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.videouser"
+              label="videouser"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.videopass"
+              label="videopass"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
 
-      <v-col cols="12" class="padding_none">
-        <span class="title font-weight-bold">卡口联动参数</span>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-row>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.checkip"
-            label="checkip"
-            :rules="dataRules"
-            required
-          ></v-text-field>
+        <v-col cols="12" class="padding_none">
+          <span class="title font-weight-bold">卡口联动参数</span>
         </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.checkport"
-            label="checkport"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.checkuser"
-            label="checkuser"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.checkpass"
-            label="checkpass"
-            :rules="dataRules"
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
+        <v-spacer></v-spacer>
+        <v-row>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.checkip"
+              label="checkip"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.checkport"
+              label="checkport"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.checkuser"
+              label="checkuser"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.checkpass"
+              label="checkpass"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
 
-      <v-col cols="12" class="padding_none">
-        <span class="title font-weight-bold">网络较时参数</span>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-row>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="p.timeip"
-            label="timeip"
-            :rules="dataRules"
-            required
-          ></v-text-field>
+        <v-col cols="12" class="padding_none">
+          <span class="title font-weight-bold">网络较时参数</span>
         </v-col>
-      </v-row>
-    </v-form>
-  </v-container>
+        <v-spacer></v-spacer>
+        <v-row>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.timeip"
+              label="timeip"
+              :rules="dataRules"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
+      </v-form>
+    </v-container>
+  </div>
 </template>
 <script>
 export default {
@@ -257,21 +259,28 @@ export default {
     this.$http
       .get(api)
       .then((response) => {
-				this.p = response.data;
-				this.select=response.data.direction
-				this.select2=response.data.position
-        console.log(this.p,	this.select);
+        this.p = response.data;
+        this.select = response.data.direction;
+        this.select2 = response.data.position;
+        console.log(this.p, this.select);
       })
       .catch((error) => {
         this.$toasted.show(error);
       });
   },
   data: () => ({
-		select:'',
-		select2:'',
-		wItem:[{text:"正向",value:1},{text:"反向",value:2}],
-		p: {},
-		items:[{text:"上行路侧",value:1},{text:"中间",value:2},{text:"下行路侧",value:3}],
+    select: "",
+    select2: "",
+    wItem: [
+      { text: "正向", value: 1 },
+      { text: "反向", value: 2 },
+    ],
+    p: {},
+    items: [
+      { text: "上行路侧", value: 1 },
+      { text: "中间", value: 2 },
+      { text: "下行路侧", value: 3 },
+    ],
     valid: false,
     dataRules: [(v) => !!v || "请输入"],
     numberRules: (v) => {
@@ -281,8 +290,8 @@ export default {
   }),
   methods: {
     onSet() {
-			this.p.direction=this.select
-			this.p.position=this.select2
+      this.p.direction = this.select;
+      this.p.position = this.select2;
       if (!this.valid) {
         return;
       }
