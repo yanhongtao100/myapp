@@ -30,6 +30,23 @@
         item-key="index"
         no-data-text
       >
+        <template v-slot:item.level="{ item }">
+          <div v-if="item.level == 0">
+            未发生排队
+          </div>
+          <div v-if="item.level == 1">
+            轻度
+          </div>
+          <div v-if="item.level == 2">
+            中度
+          </div>
+          <div v-if="item.level == 3">
+            重度
+          </div>
+          <div v-if="item.level == 4">
+            排队长度超限
+          </div>
+        </template>
       </v-data-table>
     </v-container>
   </div>

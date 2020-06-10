@@ -12,7 +12,8 @@
             <span class="ip">IP:192.108.1.1</span>
             <span class="state">状态：未连接</span>
           </div>
-          <v-card-text class="pa-4 mb-4 border_black "></v-card-text>
+          <v-card-text class="pa-4 mb-4 border_black ">
+					</v-card-text>
         </div>
         <div class="message_container">
           <div class="massage_main">
@@ -201,7 +202,7 @@ export default {
     //画面宽度
     window_width: 0,
     //浏览器宽度
-    picWidth: 500,
+    picWidth: 900,
     //车道数,默认为8
     laneNum: 8,
     //车道长度
@@ -274,7 +275,8 @@ export default {
         return a;
       };
     },
-  },
+	},
+
   created: function() {
     var ip = "127.0.0.1";
     var api = "/api/param/ecu";
@@ -297,7 +299,7 @@ export default {
     this.$http
       .get("/api/param/radar")
       .then((res) => {
-				this.roadLength = res.data.distance;
+				this.picWidth = res.data.distance;
       })
       .catch((error) => {
         this.$toasted.show(error);

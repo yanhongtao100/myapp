@@ -9,7 +9,7 @@
             <v-img
               class="img_login"
               width="400px"
-              src="../assets/b319e8ccc7bf7bf3775a98ea718f718.png"
+              src="../assets/b319e8ccc7bf7bf3775a98ea718f718.jpg"
             ></v-img>
           </div>
           <v-card width="400" height="350" class="login_input">
@@ -83,27 +83,22 @@ export default {
           position: "bottom-center",
           duration: 2000,
         });
-      } else if (this.from.username != this.from.password) {
-        this.$toasted.error("密码输入错误", {
-          position: "bottom-center",
-          duration: 2000,
-        });
-        console.log(1);
-      } else if (this.from.username === this.from.password) {
+      }  else  {
         this.$http
           .get(`/api/param/setpass`, this.$qs.stringify(this.from))
           .then((response) => {
             if (response.data.ret == 0) {
-              this.$toasted.success("参数设置成功", {
+              this.$toasted.success("修改成功", {
                 position: "bottom-center",
                 duration: 2000,
               });
-            } else {
-              this.$toasted.error("参数设置失败:", {
+						}
+						else {
+							this.$toasted.error("修改失败", {
                 position: "bottom-center",
                 duration: 2000,
               });
-            }
+						}
           });
       }
     },

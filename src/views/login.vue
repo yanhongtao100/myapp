@@ -8,7 +8,7 @@
             <v-img
               class="img_login"
               width="400px"
-              src="../assets/b319e8ccc7bf7bf3775a98ea718f718.png"
+              src="../assets/b319e8ccc7bf7bf3775a98ea718f718.jpg"
             ></v-img>
           </div>
           <v-card width="400" height="350" class="login_input">

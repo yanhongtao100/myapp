@@ -92,6 +92,14 @@
               required
             ></v-text-field>
           </v-col>
+          <v-col cols="12" md="3">
+            <v-text-field
+              v-model="p.distance"
+              label="检测距离"
+              :rules="[numberRules]"
+              required
+            ></v-text-field>
+          </v-col>
         </v-row>
         <v-col cols="12" class="padding_none">
           <span class="title font-weight-bold">目标融合参数</span>

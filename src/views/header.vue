@@ -1,5 +1,5 @@
 <template>
-<div>
+  <div>
     <div class="head">
       <v-app-bar app color="blue darken-4" dark flat>
         <v-toolbar-title>
@@ -122,18 +122,17 @@
         >
           一体化智能广域交通检测雷达
         </v-alert>
-        <div class="time_now" v-if="ishow">
+        <div class="time_now" v-show="ishow">
           <div class="text-right">{{ currentTime }}</div>
         </div>
       </v-app-bar>
 
       <v-content>
-        <transition name="fade-transform" mode="out-in">
-        </transition>
+        <transition name="fade-transform" mode="out-in"> </transition>
       </v-content>
     </div>
-			<div class="space"></div>
-			</div>
+    <div class="space"></div>
+  </div>
 </template>
 
 <script>
@@ -141,7 +140,7 @@ export default {
   data: () => ({
     overlay: false,
     timer: "", //定义一个定时器的变量
-    currentTime: new Date(), // 获取当前
+    currentTime:'', // 获取当前
     currentDay: 0,
     on: {},
     ishow: false,
@@ -154,14 +153,15 @@ export default {
         _this.currentTime = res.data.dt;
       });
     }, 1000);
-    this.ishow = true;
   },
   beforeDestroy() {
     if (this.timer) {
       clearInterval(this.timer); //清除的定时器
     }
   },
-  mounted() {},
+  mounted() {
+    this.ishow = true;
+  },
   methods: {
     sysRest() {
       this.$router.push("SysReset");
@@ -211,17 +211,17 @@ export default {
 html body {
   min-width: 62.5rem;
 }
-.space{
-	height: 60px;
-	width: 100%;
+.space {
+  height: 60px;
+  width: 100%;
 }
-.head{
-	position: fixed;
-	width: 100%;
-	height: 60px;
-	top: 0;
-	left: 0;
-	z-index: 1;
+.head {
+  position: fixed;
+  width: 100%;
+  height: 60px;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 .fade-enter-active,
 .fade-leave-active {

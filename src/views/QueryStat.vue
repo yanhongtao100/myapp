@@ -30,6 +30,17 @@
         item-key="index"
         no-data-text
       >
+        <template v-slot:item.timeoc="{ item }">
+          <div>{{ new Number(item.timeoc).toFixed(3) }}</div>
+        </template>
+        <template v-slot:item.spaceoc="{ item }">
+          <div>{{ new Number(item.spaceoc).toFixed(3) }}</div>
+        </template>
+        <template v-slot:item.speed="{ item }">
+          <div>
+            {{ new Number((item.speed * 3600) / 1000).toFixed(3) + "Km/h" }}
+          </div>
+        </template>
       </v-data-table>
     </v-container>
   </div>
