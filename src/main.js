@@ -1,9 +1,11 @@
 import Vue from 'vue'
-import DatetimePicker from 'vuetify-datetime-picker'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
+import DatetimePicker from 'vuetify-datetime-picker'
 import vuetify from './plugins/vuetify';
+
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Toasted from 'vue-toasted';
