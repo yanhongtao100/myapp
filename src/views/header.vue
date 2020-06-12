@@ -140,7 +140,7 @@ export default {
   data: () => ({
     overlay: false,
     timer: "", //定义一个定时器的变量
-    currentTime:'', // 获取当前
+    currentTime: "", // 获取当前
     currentDay: 0,
     on: {},
     ishow: false,
@@ -148,11 +148,14 @@ export default {
   computed: {},
   created: function() {
     var _this = this; //声明一个变量指向Vue实例this，保证作用域一致
-    this.timer = setInterval(function() {
-      _this.$http.get(`/api/gettime`).then((res) => {
-        _this.currentTime = res.data.dt;
-      });
-    }, 1000);
+    _this.$http.get(`/api/gettime`).then((res) => {
+      _this.currentTime = res.data.dt;
+      var dates = Number(Date.parse(_this.currentTime));
+      this.timer = setInterval(() => {
+        _this.currentTime = new Date(dates).format("yyyy-MM-dd HH:mm:ss");
+        dates += 1000;
+      }, 1000);
+    });
   },
   beforeDestroy() {
     if (this.timer) {

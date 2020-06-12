@@ -71,7 +71,7 @@
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.mileage"
-              label="英里数"
+              label="桩号"
               :rules="dataRules"
               required
             ></v-text-field>
@@ -173,32 +173,28 @@
             <v-text-field
               v-model="p.videoip"
               label="视频IP"
-              :rules="dataRules"
-              required
+
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.videoport"
               label="视频端口"
-              :rules="dataRules"
-              required
+
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.videouser"
               label="视频用户名"
-              :rules="dataRules"
-              required
+
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.videopass"
               label="视频密码"
-              :rules="dataRules"
-              required
+
             ></v-text-field>
           </v-col>
         </v-row>
@@ -212,32 +208,27 @@
             <v-text-field
               v-model="p.checkip"
               label="卡口IP"
-              :rules="dataRules"
-              required
+
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.checkport"
               label="卡口端口"
-              :rules="dataRules"
-              required
+
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.checkuser"
               label="卡口用户名"
-              :rules="dataRules"
-              required
+
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field
               v-model="p.checkpass"
               label="卡口密码"
-              :rules="dataRules"
-              required
             ></v-text-field>
           </v-col>
         </v-row>

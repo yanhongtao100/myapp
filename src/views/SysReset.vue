@@ -1,7 +1,39 @@
 <template>
   <div>
     <h-title></h-title>
-    <v-row>
+    <div class="center">
+      <v-row>
+        <v-col cols="12">
+          <span class="fz-big">系统设置</span>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12">
+          <span  class="fz-bi">系统重启</span>
+          <v-btn color="primary" @click="reBoot" class="btn_reset">重启</v-btn>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12">
+          <span  class="fz-bi">时间设置</span>
+        </v-col>
+
+        <v-row class="tac">
+          <v-col cols="4">
+            <v-datetime-picker
+              class="timeWidth"
+              label="选择时间"
+              v-model="result2"
+            >
+            </v-datetime-picker>
+						</v-col>
+						<v-col cols="4">
+            <v-btn color="primary" @click="setTime" class="left">提交</v-btn>
+          </v-col>
+        </v-row>
+      </v-row>
+    </div>
+    <!-- <v-row>
       <v-col cols="12">
         <span class="title font-weight-bold">系统设置</span>
       </v-col>
@@ -27,7 +59,7 @@
           >
         </v-row>
       </div>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 
@@ -92,14 +124,33 @@ html body {
   width: 100%;
   height: 100%;
 }
-.text_resert {
-  font-size: 20px;
-  margin-left: 50px;
-}
-.time_box {
-  margin-left: 50px;
-}
+
 .btn_reset {
-  margin-left: 160px;
+  margin-left: 87px;
 }
+.center {
+  width: 500px;
+  height: 300px;
+  margin: 80px auto;
+  text-align: center;
+}
+.timeWidth {
+  width: 200px;
+}
+.tac {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.v-input {
+  width: 100px !important;
+}
+.fz-big{
+	font-size: 24px;
+}
+.fz-bi{
+	font-size: 24px;
+	margin-right: 10px;
+}
+
 </style>

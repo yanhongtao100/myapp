@@ -8,12 +8,47 @@
       <div class="main_ms">
         <div class="video_main">
           <div>
-            <v-btn color="primary" class="video_btn" small top>打开视频</v-btn>
-            <span class="ip">IP:192.108.1.1</span>
-            <span class="state">状态：未连接</span>
+            <v-btn
+              color="primary"
+              class="video_btn"
+              small
+              top
+              @click="showVideo = !showVideo"
+              >{{ showVideo ? "关闭视频" : "打开视频" }}</v-btn
+            >
+            <span class="ip">{{ videoData.videoip }}</span>
+            <span class="state">{{ "状态："+ getstatus }}</span>
+            <v-btn
+              color="primary"
+              class="float-right video_btn"
+              small
+              href="../static/vlc-3.0.8-win32.exe"
+              download="vlc-3.0.8-win32.exe"
+              >下载插件
+            </v-btn>
           </div>
-          <v-card-text class="pa-4 mb-4 border_black ">
-					</v-card-text>
+          <v-card-text class="pa-4 mb-4 border_black " id="video_box" ref="box">
+            <div v-if="showVideo" id="player">
+              <object
+                stablect
+                type="application/x-vlc-plugin"
+                wmode="transparent"
+                id="vlc"
+                events="True"
+                width="100%"
+                :height="380"
+                WindowlessVideo="1"
+              >
+                <param name="mrl" :value="videoParams" />
+                <param name="volume" value="30" />
+                <param name="WindowlessVideo" value="1" />
+                <param name="wmode" value="Transparent" />
+                <param name="AutoPlay" value="False" />
+                <param name="AutoLoop" value="False" />
+                <param name="toolbar" value="False" />
+              </object>
+            </div>
+          </v-card-text>
         </div>
         <div class="message_container">
           <div class="massage_main">
@@ -172,6 +207,9 @@ import mqtt from "mqtt";
 var client = {};
 export default {
   data: () => ({
+		video_width:'',
+    showVideo: false, //控制视频显隐
+    videoData: "",
     clickCar: {},
     configParams: {
       local_ecu: 2,
@@ -230,6 +268,19 @@ export default {
     ],
   }),
   computed: {
+    getstatus() {
+      var a = "";
+      if (this.configParams.linkage_video == 0) {
+        a = "未连接";
+      } else if (this.configParams.linkage_video == 1) {
+        a = "已连接";
+      } else if (this.configParams.linkage_video == 2) {
+        a = "连接失败";
+      } else if (this.configParams.linkage_video == 3) {
+        a = "未配置";
+      }
+      return a;
+    },
     getCpu() {
       return function(data) {
         this.styles = {
@@ -244,6 +295,9 @@ export default {
           a = "正常";
         } else if (data == 2) {
           a = "连接失败";
+				}
+				else if (data == 0) {
+          a = "未配置";
         }
         return a;
       };
@@ -275,7 +329,7 @@ export default {
         return a;
       };
     },
-	},
+  },
 
   created: function() {
     var ip = "127.0.0.1";
@@ -285,6 +339,10 @@ export default {
       .then((response) => {
         ip = response.data.ip;
         console.log(ip, response);
+        this.videoData = response.data;
+        this.videoParams = `rtsp://${this.videoData.videouser}:${this.videoData.videopass}@${this.videoData.videoip}:${this.videoData.videoport}/h264/ch3/main/av_stream`;
+
+        // rtsp://admin:12345@192.168.1.222:554/h264/ch3/main/av_stream
         client = mqtt.connect("ws://" + ip + ":1020/msg", {
           username: "admin",
           password: "password",
@@ -293,22 +351,23 @@ export default {
       })
       .catch((error) => {
         this.$toasted.show(error);
-			});
-			
-			
+      });
+
     this.$http
       .get("/api/param/radar")
       .then((res) => {
-				this.picWidth = res.data.distance;
+        this.picWidth = res.data.distance;
       })
       .catch((error) => {
         this.$toasted.show(error);
       });
 
+
     //获取车道
   },
   mounted: function() {
-    this.drawRoad();
+		this.drawRoad();
+
   },
   beforeDestroy: function() {
     console.log("mq close");
@@ -365,6 +424,7 @@ export default {
         if (topic == "ui/objects") {
           var objs = JSON.parse(payload);
           this.desserts = objs.objs;
+          console.log(objs);
 
           this.getConfigParams(objs.status);
           this.drawCars(objs.objs);
@@ -665,7 +725,7 @@ html body {
 .location {
   border: 0.0625rem solid black;
   height: 9.125rem;
-  width: 58.7%;
+  width: 58.7% !important;
   position: absolute;
   left: 0;
   bottom: 0;
@@ -674,7 +734,7 @@ html body {
 .machine_state {
   border: 0.0625rem solid black;
   height: 9.125rem;
-  width: 40%;
+  width: 40% !important;
   bottom: 0px;
   right: 0px;
   padding: 0;
@@ -691,7 +751,10 @@ html body {
   width: 65%;
   height: 6.25rem;
   float: left;
-  margin: 25px 0 0px 0;
+  margin: 15px 0 0px 0;
+}
+.v-card__text {
+  padding: 0 !important;
 }
 .left {
   display: inline-block;
@@ -720,7 +783,7 @@ html body {
 .speed {
   position: absolute;
   right: 0;
-  margin: 25px 0 0 0;
+  margin: 15px 0 0 0;
   width: 27%;
   height: 6.25rem;
 }
@@ -749,7 +812,7 @@ html body {
 }
 .local {
   width: 100%;
-  margin: 25px 0 0 0;
+  margin: 15px 0 0 0;
   height: 80px;
   justify-self: center;
 }
